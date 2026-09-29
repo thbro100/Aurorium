@@ -93,6 +93,41 @@ rustup default stable-x86_64-pc-windows-msvc
 
 **On Linux:** use target `x86_64-unknown-linux-gnu`.
 
+### Running with Docker
+
+A multi-stage `Dockerfile` is included. Prebuilt images are published to the GitHub Container Registry (GHCR) on every `v*` tag.
+
+```bash
+# Pull the latest tagged image
+docker pull ghcr.io/Revive101/Aurorium:latest
+
+# Run it, persisting assets + database in a named volume
+docker run -d \
+  --name aurorium \
+  -p 12369:12369 \
+  -v aurorium-data:/app/data \
+  -v aurorium-db:/app/db \
+  ghcr.io/Revive101/Aurorium:latest
+```
+
+> [!NOTE]
+> The container image binds to `0.0.0.0:12369` and expects a `config.toml` in `/app`. A container-ready config lives at [`container/config.toml`](container/config.toml) — mount it over `/app/config.toml` if you need to change the port, patch host, or fetch interval:
+>
+> ```bash
+> docker run -d \
+>   --name aurorium \
+>   -p 12369:12369 \
+>   -v "$(pwd)/container/config.toml:/app/config.toml:ro" \
+>   -v aurorium-data:/app/data \
+>   ghcr.io/Revive101/Aurorium:latest
+> ```
+
+To build the image locally instead:
+
+```bash
+docker build -t aurorium .
+```
+
 ## Configuration
 
 Aurorium is now configured entirely through `config.toml` in the working directory:

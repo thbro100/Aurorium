@@ -1,0 +1,12 @@
+target
+data
+logs
+config.toml
+aurorium.db*
+.git
+.github
+.gitignore
+Dockerfile
+.dockerignore
+README.md
+LICENSE.md
